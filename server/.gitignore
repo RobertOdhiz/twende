@@ -39,3 +39,6 @@ spec/
 
 # Packages
 package-lock.json
+
+# migration files
+migrations/
