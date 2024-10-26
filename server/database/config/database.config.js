@@ -16,7 +16,7 @@ if (config.url) {
     config.database,
     config.username,
     config.password,
-    ...config
+    config
   );
 }
 
@@ -24,6 +24,10 @@ const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
+    
+    await sequelize.sync({ alter: true });
+    
+    console.log('Database synchronized successfully.');
   } catch (err) {
     console.error('Unable to connect to the database:', err);
     throw err;
