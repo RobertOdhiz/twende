@@ -6,6 +6,7 @@ import { LocationOn } from '@mui/icons-material';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import './BusMap.css';
+import { fetchLocationData } from '../utils/dataHandler';
 
 const BusIconSVG = () => (
     <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -54,32 +55,45 @@ const LocationMarker = ({ position, label, color }) => {
 };
 
 const BusMap = () => {
-    const [busLocations, setBusLocations] = useState([
-        { id: 1, position: [-1.2921, 36.8219], name: "Bus 1" },
-        { id: 2, position: [-1.2935, 36.8235], name: "Bus 2" },
-    ]);
-    const [pickupLocation, setPickupLocation] = useState([-1.2921, 36.8219]);
+    const [locations, setLocations] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
+    const [pickupLocation, setPickupLocation] = useState(null);
     const [dropOffLocation, setDropOffLocation] = useState(null);
-    const [userLocation, setUserLocation] = useState('');
+    const [busLocations, setBusLocations] = useState([]);
+    const [pickupStations, setPickupStations] = useState([]);
 
     useEffect(() => {
-        const updateBusLocations = () => {
-            const updatedLocations = [
-                { id: 1, position: [-1.2935, 36.8235], name: "Bus 1" },
-                { id: 2, position: [-1.2950, 36.8250], name: "Bus 2" }
-            ];
-            setBusLocations(updatedLocations);
-        };
+        fetchLocationData().then(res => {
+            const filteredLocations = res.data || [];
+            setLocations(filteredLocations);
 
-        const interval = setInterval(updateBusLocations, 5000);
-        return () => clearInterval(interval);
+            // Filter for bus locations (type: 'driver') and pickup stations (type: 'stage')
+            setBusLocations(filteredLocations.filter(location => location.type === 'driver'));
+            setPickupStations(filteredLocations.filter(location => location.type === 'stage'));
+        }).catch(err => {
+            console.log('Error fetching locations: ', err);
+        });
+
+        // Get user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const userCoords = [latitude, longitude];
+                    setUserLocation(userCoords);
+                    setPickupLocation(userCoords); // Set pickup location to user's current location
+                },
+                (error) => {
+                    console.log('Error getting user location:', error);
+                }
+            );
+        } else {
+            console.log('Geolocation is not supported by this browser.');
+        }
     }, []);
 
     const handleLocationChange = (e) => {
-        setUserLocation(e.target.value);
-    };
-    const handlePickupChange = (e) => {
-        setPickupLocation(e.target.value);
+        setDropOffLocation(e.target.value);
     };
 
     const handleSubmit = (e) => {
@@ -93,7 +107,7 @@ const BusMap = () => {
     };
 
     const getCoordinatesFromLocation = (location) => {
-        return location === 'Karen' ? [-1.2921, 36.8219] : null; // Mock example
+        return location === 'Karen' ? [-1.2921, 36.8219] : null;
     };
 
     return (
@@ -119,14 +133,14 @@ const BusMap = () => {
                         label="Pick-up Location"
                         variant="outlined"
                         fullWidth
-                        value={pickupLocation}
-                        onChange={handlePickupChange}
+                        value={userLocation ? `${userLocation[0]}, ${userLocation[1]}` : ''}
+                        onChange={(e) => setPickupLocation(e.target.value)}
                     />
                     <TextField
                         label="Drop-off Location"
                         variant="outlined"
                         fullWidth
-                        value={userLocation}
+                        value={dropOffLocation ? `${dropOffLocation[0]}, ${dropOffLocation[1]}` : ''}
                         onChange={handleLocationChange}
                     />
                     <Button
@@ -157,7 +171,7 @@ const BusMap = () => {
                 margin: '16px',
             }}>
                 <MapContainer
-                    center={pickupLocation}
+                    center={pickupLocation || [0, 0]}
                     zoom={13}
                     style={{ height: "100%", width: "100%", borderRadius: '12px' }}
                     zoomControl={false}
@@ -173,12 +187,17 @@ const BusMap = () => {
                             pathOptions={{ color: '#003135', weight: 5, dashArray: '5, 10' }}
                         />
                     )}
-                    <LocationMarker position={pickupLocation} label="Pick-up" color="#1976d2" />
+                    {pickupLocation && (
+                        <LocationMarker position={pickupLocation} label="Pick-up" color="#1976d2" />
+                    )}
                     {dropOffLocation && (
                         <LocationMarker position={dropOffLocation} label="Drop-off" color="red" />
                     )}
                     {busLocations.map(bus => (
                         <BusMarker key={bus.id} position={bus.position} name={bus.name} />
+                    ))}
+                    {pickupStations.map(station => (
+                        <LocationMarker key={station.id} position={station.position} label="Station" color="green" />
                     ))}
                 </MapContainer>
             </Box>
