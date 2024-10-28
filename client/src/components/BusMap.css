@@ -1,0 +1,60 @@
+/* BusMap.css */
+
+/* General Map Styling */
+.leaflet-container {
+    height: 800vh !important;  /* Full viewport height */
+    width: 80vw !important;   /* Full viewport width */
+    border-radius: 12px;       /* Rounded corners for the map */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Popup Styling */
+.leaflet-popup-content-wrapper {
+    font-size: 1rem;           /* Enhanced font size for readability */
+    line-height: 1.5;
+    color: #333333;            /* Darker font color for better contrast */
+    padding: 8px 12px;         /* Increased padding for a cleaner look */
+    border-radius: 6px;        /* Slightly rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for popups */
+}
+
+/* Zoom Control Styling */
+.leaflet-control-zoom {
+    background-color: #ffffff;  /* White background for zoom controls */
+    border-radius: 8px;         /* Rounded corners for controls */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+    color: #003135;             /* Custom color for zoom icons */
+    padding: 8px;               /* Increased padding for clickable area */
+}
+
+/* Custom Bus Marker Icon */
+.custom-bus-icon {
+    filter: hue-rotate(180deg) brightness(0.8); /* Custom color tone */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Location Marker Icon Customization */
+.custom-location-icon img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Shadow for visibility */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .leaflet-container {
+        height: 60vh !important;  /* Reduce map height on small screens */
+        width: 100vw !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+        font-size: 0.9rem;       /* Adjust font size for mobile */
+    }
+}
