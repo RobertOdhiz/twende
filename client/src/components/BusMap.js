@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { LocationOn } from '@mui/icons-material';
-import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { LocationOn, MyLocation } from '@mui/icons-material';
+import { Box, TextField, Button, Typography, Paper, Autocomplete, Fab } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import './BusMap.css';
 import { fetchLocationData } from '../utils/dataHandler';
@@ -61,58 +61,66 @@ const BusMap = () => {
     const [dropOffLocation, setDropOffLocation] = useState(null);
     const [busLocations, setBusLocations] = useState([]);
     const [pickupStations, setPickupStations] = useState([]);
+    const mapRef = useRef(null);
+
+    const predefinedLocations = [
+        { name: 'Karen', coords: [-1.2921, 36.8219] },
+        { name: 'Westlands', coords: [-1.2683, 36.8111] },
+        { name: 'CBD', coords: [-1.2833, 36.8219] },
+    ];
 
     useEffect(() => {
-        fetchLocationData().then(res => {
-            const filteredLocations = res.data || [];
-            setLocations(filteredLocations);
+        const fetchData = async () => {
+            try {
+                const res = await fetchLocationData();
+                const filteredLocations = res.data || [];
+                setLocations(filteredLocations);
 
-            // Filter for bus locations (type: 'driver') and pickup stations (type: 'stage')
-            setBusLocations(filteredLocations.filter(location => location.type === 'driver'));
-            setPickupStations(filteredLocations.filter(location => location.type === 'stage'));
-        }).catch(err => {
-            console.log('Error fetching locations: ', err);
-        });
+                setBusLocations(filteredLocations.filter(location => location.type === 'driver'));
+                setPickupStations(filteredLocations.filter(location => location.type === 'stage'));
+            } catch (err) {
+                console.log('Error fetching locations: ', err);
+            }
+        };
 
-        // Get user's current location
+        fetchData();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     const userCoords = [latitude, longitude];
                     setUserLocation(userCoords);
-                    setPickupLocation(userCoords); // Set pickup location to user's current location
+                    setPickupLocation(userCoords);
                 },
-                (error) => {
-                    console.log('Error getting user location:', error);
-                }
+                (error) => console.log('Error getting user location:', error)
             );
         } else {
             console.log('Geolocation is not supported by this browser.');
         }
     }, []);
 
-    const handleLocationChange = (e) => {
-        setDropOffLocation(e.target.value);
+    const handleDropOffChange = (event, value) => {
+        const location = predefinedLocations.find(loc => loc.name === value);
+        if (location) setDropOffLocation(location.coords);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (userLocation) {
-            const coords = getCoordinatesFromLocation(userLocation);
-            if (coords) {
-                setDropOffLocation(coords);
-            }
+        if (userLocation && dropOffLocation) {
+            console.log('Booking confirmed from', userLocation, 'to', dropOffLocation);
         }
     };
 
-    const getCoordinatesFromLocation = (location) => {
-        return location === 'Karen' ? [-1.2921, 36.8219] : null;
+    const handleGetLocation = () => {
+        if (userLocation && mapRef.current) {
+            const map = mapRef.current;
+            map.setView(userLocation, 15); // Center map on user location with a zoom level of 15
+        }
     };
 
     return (
         <Box sx={{ display: 'flex', height: '100vh', backgroundColor: '#f0f4f8' }}>
-            {/* Sidebar */}
             <Paper elevation={3} sx={{
                 width: '30%',
                 p: 4,
@@ -134,14 +142,12 @@ const BusMap = () => {
                         variant="outlined"
                         fullWidth
                         value={userLocation ? `${userLocation[0]}, ${userLocation[1]}` : ''}
-                        onChange={(e) => setPickupLocation(e.target.value)}
+                        InputProps={{ readOnly: true }}
                     />
-                    <TextField
-                        label="Drop-off Location"
-                        variant="outlined"
-                        fullWidth
-                        value={dropOffLocation ? `${dropOffLocation[0]}, ${dropOffLocation[1]}` : ''}
-                        onChange={handleLocationChange}
+                    <Autocomplete
+                        options={predefinedLocations.map(loc => loc.name)}
+                        onChange={handleDropOffChange}
+                        renderInput={(params) => <TextField {...params} label="Drop-off Location" variant="outlined" />}
                     />
                     <Button
                         type="submit"
@@ -162,7 +168,6 @@ const BusMap = () => {
                 </form>
             </Paper>
 
-            {/* Map Container */}
             <Box sx={{
                 flex: 1,
                 position: 'relative',
@@ -175,6 +180,7 @@ const BusMap = () => {
                     zoom={13}
                     style={{ height: "100%", width: "100%", borderRadius: '12px' }}
                     zoomControl={false}
+                    ref={mapRef}
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -200,6 +206,21 @@ const BusMap = () => {
                         <LocationMarker key={station.id} position={station.position} label="Station" color="green" />
                     ))}
                 </MapContainer>
+
+                <Fab
+                    color="primary"
+                    aria-label="my-location"
+                    onClick={handleGetLocation}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 16,
+                        right: 16,
+                        backgroundColor: '#003135',
+                        '&:hover': { backgroundColor: '#004e5f' }
+                    }}
+                >
+                    <MyLocation />
+                </Fab>
             </Box>
         </Box>
     );

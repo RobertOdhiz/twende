@@ -2,7 +2,7 @@ const baseURL = 'https://twende-server.vercel.app';
 const locationsUrl  = `$baseURL/api/locations`;
 
 export const fetchLocationData = async () => {
-    const response = fetch(locationsUrl);
+    const response = await fetch(locationsUrl);
 
     try {
     if (!response.ok) {
