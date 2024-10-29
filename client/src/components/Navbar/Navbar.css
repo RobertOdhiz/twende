@@ -1,0 +1,142 @@
+.navbar{
+    background-color: #003135;
+    height: 5rem;
+    /* width: 100%; */
+    max-width: 150rem;
+    margin: 0 auto;
+    padding: 4rem 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    font-family: Quicksand;
+    font-weight: 650;
+    color: #AFDDE5;
+}
+.logo{
+    object-fit: cover;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    /* height: 5rem; */
+    width: 20%;
+    border-radius: 50%;
+}
+/* .desktopMenu{
+    justify-content: space-between;
+} */
+.navbar .desktopMenuListItem{
+    margin: 1rem;
+    cursor: pointer;
+    color: #AFDDE5;
+
+}
+
+.desktopMenuListItem:hover{
+    color:#AFDDE5;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #AFDDE5;
+    font-weight: bolder;
+}
+
+
+
+.customLink {
+    color: black; 
+    text-decoration: none;
+  }
+  
+  .customLink:hover {
+    color: #AFDDE5; 
+  }
+  
+  .customLink.active {
+    color: #AFDDE5; 
+  }
+
+Link .desktopMenuListItem{
+    text-decoration: none;
+    color: black;
+
+}
+.active{
+    color: #AFDDE5;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #8ABFB2;
+    
+}
+.mobMenu{
+    display: none;
+    /* width: 60px; */
+    color:#003135;
+    font-weight: bold;
+    /* object-fit: cover; */
+    height: 1.8rem;
+    font-size: inherit;
+    cursor: pointer;
+    /* max-width: 40rem; */
+
+
+
+}
+.navMenu{
+    position: absolute;
+    top: 4rem;
+    right: 2rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    height: fit-content;
+    min-width: 15rem;
+    background:#01332B;
+    border-radius: 1rem;
+
+
+}
+.listItem{
+    color: black;
+    padding: 0.5rem 3rem;
+    margin: 0.25rem;
+    background: white;
+
+}
+
+@media screen  and (max-width:720px){
+    .mobMenu{
+        display: flex;
+    }
+    .desktopMenu{
+        display: none;
+    }
+    .customLink button{
+        display: none;
+    }
+    #search{
+        display: none;
+    }
+    
+}
+
+@media screen and (max-width: 1500px) {
+    .customLink button{
+        display: none;
+    }
+    .mobMenu{
+        display: flex;
+    }
+    .desktopMenu{
+        display: none;
+    }
+    .desktopMenuBtn{
+        display: none;
+
+    }
+    #search{
+        display: none;
+    }
+    
+   
+    
+}

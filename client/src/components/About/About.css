@@ -1,0 +1,50 @@
+.about{
+    width: 100%;
+    background-color: #AFDDE5;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    height: 150vh;
+
+}
+.about h1{
+    color: #003135;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+.about p{
+    width: 50%;
+    
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+    color: #003135;
+    font-size: 1.5rem;
+    margin-bottom: 200px;
+}
+.about .discover{
+    object-fit: cover;
+    height: 80vh;
+    width: 100%;
+}
+.about .discover img{
+    object-fit: cover;
+    height: 80vh;
+    width: 100%;
+}
+.about .discover .aboutext{
+    position: absolute;
+    bottom: 100px;
+    background: rgb(70, 48, 2);
+    background: rgba(8, 54, 16, 0.5);
+    color: white;
+    width: 50%;
+    height: 60%;
+    padding: 20px;
+    right: 0;
+    text-align: center;
+    font-size: 1.5rem;
+}

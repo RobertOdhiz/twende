@@ -6,7 +6,7 @@ import { LocationOn, MyLocation } from '@mui/icons-material';
 import { Box, TextField, Button, Typography, Paper, Autocomplete, Fab } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import './BusMap.css';
-import { fetchLocationData } from '../utils/dataHandler';
+import { fetchLocationData } from '../../utils/dataHandler';
 
 const BusIconSVG = () => (
     <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
