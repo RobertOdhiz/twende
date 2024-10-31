@@ -1,40 +1,79 @@
-/* App.css */
-
-body, html, #root {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.App {
-  text-align: left;
-}
-
-.App-header {
-  background-color: #003135;
-  color: #ffffff;
-  padding: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.map-container {
+/* Footer Container */
+.footer-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: calc(100vh - 80px);
-  padding: 100px;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #003135, #004e5f);
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
 }
 
-.leaflet-container {
-  height: 80vh; /* Take 80% of the viewport height */
-  width: 80vw;  /* Take 80% of the viewport width */
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+/* Footer Heading */
+.footer-heading {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
-h1 {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 700;
-  letter-spacing: 2px;
+/* Social Media Icons */
+.footer-social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.footer-social-icons a {
+  color: #ffffff;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-social-icons a:hover {
+  transform: scale(1.2);
+  color: #f5f5f5;
+}
+
+/* Footer Links */
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: #d1e0e0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #f5f5f5;
+}
+
+/* Copyright */
+.footer-copyright {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #b0c4c4;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .footer-heading {
+      font-size: 1.5rem;
+  }
+
+  .footer-links {
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+
+  .footer-social-icons {
+      gap: 0.5rem;
+  }
 }

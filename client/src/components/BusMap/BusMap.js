@@ -180,13 +180,13 @@ const BusMap = () => {
                 <MapContainer
                     center={pickupLocation || [0, 0]}
                     zoom={13}
-                    style={{ height: "100%", width: "100%", borderRadius: '16px' }}
+                    style={{ height: "80vh", width: "80vw", borderRadius: '16px' }}
                     zoomControl={false}
                     ref={mapRef}
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; OpenStreetMap contributors'
+                        // attribution='&copy; OpenStreetMap contributors'
                     />
                     <ZoomControl position="topright" />
                     {dropOffLocation && (

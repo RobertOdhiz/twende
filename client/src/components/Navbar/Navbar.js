@@ -16,7 +16,7 @@ function Navbar() {
             </Link>
 
             <div className="desktopMenu">
-                {['home', 'about', 'discover', 'whytwende', 'values', 'vision'].map((section, index) => (
+                {['home', 'about', 'discover'].map((section, index) => (
                     <ScrollLink
                         key={index}
                         activeClass="active"

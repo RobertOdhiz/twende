@@ -3,6 +3,7 @@ import React from 'react';
 import Home from './Pages/Home';
 import './App.css';  // Import custom CSS file
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Book from './Pages/Book';
 function App() {
@@ -14,10 +15,9 @@ function App() {
 
         <Routes>
          <Route path="/home" element={<Home />} />
-         <Route path='/book' element={<Book />} />
-          
+         <Route path='/book' element={<Book />} /> 
         </Routes>
-        
+         <Footer />
 
       </Router>
     
