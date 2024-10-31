@@ -1,50 +1,67 @@
-.about{
-    width: 100%;
-    background-color: #AFDDE5;
-    align-items: center;
+.about-container {
     display: flex;
-    flex-direction: column;
-    margin: auto;
-    justify-content: center;
-    height: 150vh;
-
-}
-.about h1{
-    color: #003135;
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-}
-.about p{
-    width: 50%;
-    
     align-items: center;
-    justify-self: center;
-    text-align: center;
-    color: #003135;
-    font-size: 1.5rem;
-    margin-bottom: 200px;
-}
-.about .discover{
-    object-fit: cover;
-    height: 80vh;
-    width: 100%;
-}
-.about .discover img{
-    object-fit: cover;
-    height: 80vh;
-    width: 100%;
-}
-.about .discover .aboutext{
-    position: absolute;
-    bottom: 100px;
-    background: rgb(70, 48, 2);
-    background: rgba(8, 54, 16, 0.5);
-    color: white;
+    justify-content: center;
+    background-color: #003135;
+    color: #ffffff;
+    padding: 5rem 2rem;
+    font-family: 'Quicksand', sans-serif;
+    position: relative;
+  }
+  
+  .about-image {
     width: 50%;
-    height: 60%;
-    padding: 20px;
-    right: 0;
-    text-align: center;
-    font-size: 1.5rem;
-}
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .about-image:hover {
+    transform: scale(1.05);
+  }
+  
+  .about-text {
+    width: 50%;
+    padding: 2rem;
+    text-align: left;
+  }
+  
+  .about-text h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #afdde5;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  }
+  
+  .about-text p {
+    font-size: 1.25rem;
+    color: #cfd7d7;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  .highlight {
+    color: #27e2a4;
+    font-weight: bold;
+  }
+  
+  .about-button {
+    background-color: #afdde5;
+    color: #003135;
+    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .about-button:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+  }
