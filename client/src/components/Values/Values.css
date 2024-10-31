@@ -1,4 +1,4 @@
-.about{
+.values{
     width: 100%;
     background-color: #AFDDE5;
     align-items: center;
@@ -6,16 +6,17 @@
     flex-direction: column;
     margin: auto;
     justify-content: center;
-    height: 80vh;
+    height: 60vh;
 
 }
-.about h1{
+.values h1{
     color: #003135;
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 2rem;
+    margin-top: 10%;
 }
-.about p{
+.values p{
     width: 50%;
     
     align-items: center;

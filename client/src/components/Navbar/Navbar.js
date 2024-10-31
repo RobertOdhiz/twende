@@ -44,7 +44,7 @@ function Navbar() {
                 </ScrollLink>
                 <ScrollLink
                     activeClass="active"
-                    to="discover"
+                    to="container-discover"
                     spy={true}
                     smooth={true}
                     offset={-100}
@@ -55,14 +55,14 @@ function Navbar() {
                 </ScrollLink>
                 <ScrollLink
                     activeClass="active"
-                    to="whytwende"
+                    to="stats-container"
                     spy={true}
                     smooth={true}
                     offset={-100}
                     duration={500}
                     className="desktopMenuListItem"
                 >
-                    Why ?
+                    Why TUENDE ?
                 </ScrollLink>
                 <ScrollLink
                     activeClass="active"
@@ -73,19 +73,9 @@ function Navbar() {
                     duration={500}
                     className="desktopMenuListItem"
                 >
-                    Values
+                    Values & Vision
                 </ScrollLink>
-                <ScrollLink
-                    activeClass="active"
-                    to="values"
-                    spy={true}
-                    smooth={true}
-                    offset={-100}
-                    duration={500}
-                    className="desktopMenuListItem"
-                >
-                    Vision
-                </ScrollLink>
+               
                 
                 
                 

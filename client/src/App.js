@@ -5,6 +5,7 @@ import './App.css';  // Import custom CSS file
 import Navbar from './components/Navbar/Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Book from './Pages/Book';
+import Footer from './components/Footer/Footer';
 function App() {
     return (
 
@@ -17,6 +18,7 @@ function App() {
          <Route path='/book' element={<Book />} />
           
         </Routes>
+        <Footer />
         
 
       </Router>
