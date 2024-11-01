@@ -4,6 +4,13 @@ import app from './src/app.js';
 import dotenv from 'dotenv';
 import http from 'http';
 
+import logger from './src/utils/logger.js';
+
+app.use((req, res, next) => {
+    logger.info(`${req.method} ${req.url}`);
+    next();
+});
+
 dotenv.config();
 
 const server = http.createServer(app);
