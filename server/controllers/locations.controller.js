@@ -6,6 +6,7 @@ let io;
 
 export const initSocket = (server) => {
     io = new Server(server);
+    console.log("Web socket Connection Established");
     io.on('connection', (socket) => {
         console.log('New WebSocket connection:', socket.id);
         socket.on('disconnect', () => {
