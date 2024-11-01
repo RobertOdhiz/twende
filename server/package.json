@@ -11,12 +11,11 @@
     "migrate": "sequelize-cli db:migrate --config database/config/config.js",
     "seed": "sequelize-cli db:seed:all --config database/config/config.js",
     "demigrate": "sequelize-cli db:migrate:undo:all --config database/config/config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Robert Odhiambo <odhizrober254@gmail.com>, Susan Gicheru <susangicheru07@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@react-google-maps/api": "^2.20.3",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -26,8 +25,7 @@
     "nodemon": "^3.1.7",
     "pg": "^8.13.1",
     "sequelize": "^6.37.5",
-    "socket.io": "^4.8.1",
-    "winston": "^3.15.0"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

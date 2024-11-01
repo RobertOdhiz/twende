@@ -6,14 +6,16 @@ import bookingService from '../services/booking.services.js';
  * @param {Object} res - The response object.
  * @returns {Object} - The response object with booking details.
  */
+
 export const bookBus = async (req, res) => {
-    const { busId, userId } = req.body;
+    const { busId } = req.body;
+    const userId = req.user.id; 
 
     try {
         const booking = await bookingService.createBooking(busId, userId);
         return res.status(201).json({
             status: 'success',
-            data: booking
+            data: booking,
         });
     } catch (error) {
         return handleInternalServerError(res, error);

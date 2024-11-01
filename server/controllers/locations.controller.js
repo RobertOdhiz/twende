@@ -6,11 +6,6 @@ let io;
 
 /**
  * Initializes the WebSocket server.
- *
- * Sets up the WebSocket server to listen for incoming connections and handle location updates
- * from buses. When a bus connects, it logs the connection and listens for location updates,
- * broadcasting them to all connected clients.
- *
  * @param {Object} server - The HTTP server instance to attach the WebSocket server to.
  */
 export const initSocket = (server) => {
@@ -24,6 +19,12 @@ export const initSocket = (server) => {
             socket.broadcast.emit('locationUpdated', data);
         });
 
+        socket.on('requestNearbyBuses', async (location) => {
+            // Logic to find nearby buses based on the location
+            const nearbyBuses = await findNearbyBuses(location);
+            socket.emit('nearbyBuses', nearbyBuses);
+        });
+
         socket.on('disconnect', () => {
             console.log('Bus disconnected: ', socket.id);
         });
@@ -32,7 +33,6 @@ export const initSocket = (server) => {
 
 /**
  * Creates a new location.
- *
  * @async
  * @function createLocation
  * @param {Object} req - The request object containing user and location data.
@@ -54,15 +54,14 @@ export const createLocation = async (req, res) => {
 
         io.emit('locationCreated', newLocation);
 
-        return res.status(201).json({
-            status: 'success',
-            data: newLocation,
-        });
+        return res.status(201).json({ status: 'success', data: newLocation });
     } catch (error) {
         console.error('Error creating location:', error);
         return handleInternalServerError(res, error);
     }
 };
+
+
 
 /**
  * Retrieves all locations.

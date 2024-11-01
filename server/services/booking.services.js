@@ -1,37 +1,58 @@
-/**
- * Retrieves booking details based on the booking ID.
- * @param {String} bookingId - The ID of the booking.
- * @returns {Object} - The booking details object.
- * @throws {Error} - Throws an error if the booking retrieval fails.
- */
-export const getBooking = async (bookingId) => {
-    // Simulate fetching booking details
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
+import Booking from '../database/models/booking.model.js';
+import Bus from '../database/models/bus.model.js';
 
-    // Example booking object
-    return {
-        bookingId,
-        userId: 'USER-123',
-        busId: 'BUS-456',
-        paymentStatus: 'paid' // or 'pending'
-    };
+/**
+ * Creates a booking for a bus.
+ * @param {String} busId - The ID of the bus.
+ * @param {String} userId - The ID of the user making the booking.
+ * @returns {Promise<Object>} The created booking object.
+ * @throws {Error} Throws an error if the booking creation fails.
+ */
+export const createBooking = async (busId, userId) => {
+    // Check if the bus exists
+    const bus = await Bus.findByPk(busId);
+    if (!bus) {
+        throw new Error('Bus not found');
+    }
+
+    // Check if the bus has available seats
+    const isAvailable = await checkBusAvailability(busId);
+    if (!isAvailable) {
+        throw new Error('Bus is fully booked');
+    }
+
+    // Create a new booking
+    const booking = await Booking.create({
+        busId,
+        userId,
+        paymentStatus: 'pending', // Initially set to pending
+    });
+
+    return booking;
 };
 
 /**
  * Checks the availability of a bus.
  * @param {String} busId - The ID of the bus.
- * @returns {Boolean} - True if the bus is available, false otherwise.
- * @throws {Error} - Throws an error if the availability check fails.
+ * @returns {Promise<Boolean>} True if the bus is available, false otherwise.
+ * @throws {Error} Throws an error if the availability check fails.
  */
-export const checkAvailability = async (busId) => {
-    // Simulate checking availability
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
+export const checkBusAvailability = async (busId) => {
+    // Count the number of bookings for the bus
+    const totalBookings = await Booking.count({ where: { busId } });
 
-    // Example availability logic
-    return true; // Assume bus is available
+    // Find the bus to get its capacity
+    const bus = await Bus.findByPk(busId);
+    if (!bus) {
+        throw new Error('Bus not found');
+    }
+
+    // Check if there are available seats
+    return totalBookings < bus.capacity; // Return true if available seats exist, otherwise false
 };
 
+// Export other necessary functions...
 export default {
-    getBooking,
-    checkAvailability
+    createBooking,
+    checkBusAvailability,
 };
