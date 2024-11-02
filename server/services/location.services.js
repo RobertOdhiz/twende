@@ -1,4 +1,4 @@
-import User from "../database/models/user.model.js";
+import User from "../database/models/user.models.js";
 import Location from "../database/models/location.models.js";
 
 class LocationService {
