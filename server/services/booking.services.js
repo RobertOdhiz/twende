@@ -1,4 +1,4 @@
-import Booking from '../database/models/booking.model.js';
+import Booking from '../database/models/booking.models.js';
 import Bus from '../database/models/bus.model.js';
 
 /**

@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.config.js'); 
-const Booking = require('../models/booking.model'); 
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.config.js'; 
+import Booking from './booking.models.js'; 
 
 const Payment = sequelize.define('Payment', {
     id: {
@@ -51,4 +51,4 @@ Payment.associate = (models) => {
     });
 };
 
-module.exports = Payment;
+export default Payment;

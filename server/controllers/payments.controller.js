@@ -1,5 +1,5 @@
 import paymentService from '../services/payment.services.js';
-import Booking from '../database/models/booking.model.js';
+import Booking from '../database/models/booking.models.js';
 import { handleInternalServerError, handleBadRequest } from '../utils/errorHandlers.js';
 
 /**

@@ -1,4 +1,4 @@
-import User from "../database/models/user.model.js";
+import User from "../database/models/user.models.js";
 
 class userService {
     static async createUser (userObj) {

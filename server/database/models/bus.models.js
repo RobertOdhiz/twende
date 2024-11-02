@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.config.js'; 
-import Company from '../models/company.model'; 
+import { sequelize  } from '../config/database.config.js'; 
+import Company from './company.models.js'; 
 
 const Bus = sequelize.define('Bus', {
     id: {

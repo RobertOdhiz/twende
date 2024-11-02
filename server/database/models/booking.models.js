@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.config.js'); 
-const User = require('../models/user.model'); 
-const Bus = require('../models/bus.model'); 
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.config.js'; 
+import User from './user.models.js'; 
+import Bus from './bus.models.js'; 
 
 const Booking = sequelize.define('Booking', {
     id: {
@@ -54,4 +54,4 @@ const Booking = sequelize.define('Booking', {
     timestamps: true,
 });
 
-module.exports = Booking;
+export default Booking;

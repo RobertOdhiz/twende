@@ -3,11 +3,11 @@
 import sequelize from '../config/database.config.js';
 import User from '../models/user.model.js';
 import Location from '../models/location.model.js';
-import Company from '../models/company.model.js';
+import Company from '../models/company.models.js';
 import Bus from '../models/bus.model.js';
-import Booking from '../models/booking.model.js';
-import Payment from '../models/payment.model.js';
-import QRCodeModel from '../models/qr_code.model.js';
+import Booking from '../models/booking.models.js';
+import Payment from '../models/payment.models.js';
+import QRCodeModel from '../models/qr_code.models.js';
 import associateModels from '../models/associateModels.js';
 
 /** @type {import('sequelize-cli').Migration} */

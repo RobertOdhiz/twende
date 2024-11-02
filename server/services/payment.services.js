@@ -1,7 +1,7 @@
 import QRCode from 'qrcode';
 import axios from 'axios';
-import Payment from '../database/models/payment.model.js';
-import Booking from '../database/models/booking.model.js';
+import Payment from '../database/models/payment.models.js';
+import Booking from '../database/models/booking.models.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
