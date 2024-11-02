@@ -8,6 +8,10 @@ const Bus = sequelize.define('Bus', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
+    plateNumber: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     companyId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -15,7 +19,8 @@ const Bus = sequelize.define('Bus', {
             model: Company, 
             key: 'id',
         },
-        onDelete: 'CASCADE', //  Automatically delete the bus if the company is deleted
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     },
     capacity: {
         type: DataTypes.INTEGER,
@@ -25,17 +30,16 @@ const Bus = sequelize.define('Bus', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    onService: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    }
 }, {
     tableName: 'buses',
+    paranoid: true,
     timestamps: true,
 });
 
-// Define relationships
-Bus.associate = (models) => {
-    Bus.belongsTo(models.Company, {
-        foreignKey: 'companyId',
-        as: 'company', // Alias for the relationship
-    });
-};
 
 export default Bus;

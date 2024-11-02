@@ -6,8 +6,6 @@
  * @throws {Error} - Throws an error if notification fails.
  */
 export const sendNotification = async (userId, message) => {
-    // Simulate sending a notification
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
 
     return {
         userId,

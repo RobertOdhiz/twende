@@ -16,7 +16,7 @@ dotenv.config();
  */
 const processMpesaPayment = async (phoneNumber, amount, reference) => {
     const apiUrl = 'https://sandbox.safaricom.co.ke/mpesa/';
-    const apiKey = process.env.MPESA_API_KEY; //  environment variable for API Key
+    const apiKey = process.env.MPESA_API_KEY;
 
     const requestBody = {
         phoneNumber,

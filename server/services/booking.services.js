@@ -25,7 +25,7 @@ export const createBooking = async (busId, userId) => {
     const booking = await Booking.create({
         busId,
         userId,
-        paymentStatus: 'pending', // Initially set to pending
+        paymentStatus: 'pending',
     });
 
     return booking;
@@ -48,7 +48,7 @@ export const checkBusAvailability = async (busId) => {
     }
 
     // Check if there are available seats
-    return totalBookings < bus.capacity; // Return true if available seats exist, otherwise false
+    return totalBookings < bus.capacity;
 };
 
 // Export other necessary functions...

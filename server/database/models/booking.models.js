@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.config.js'; 
 import User from './user.models.js'; 
 import Bus from './bus.models.js'; 
+import Location from './location.models.js';
 
 const Booking = sequelize.define('Booking', {
     id: {
@@ -25,21 +26,31 @@ const Booking = sequelize.define('Booking', {
             key: 'id',
         },
     },
-    departureLocation: {
-        type: DataTypes.STRING,
-        allowNull: false, 
+    pickupLocation: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: Location,
+            key: 'id'
+        }
     },
-    arrivalLocation: {
-        type: DataTypes.STRING,
-        allowNull: false, 
+    dropoffLocation: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: Location,
+            key: 'id'
+        }
     },
-    departureDate: {
-        type: DataTypes.DATEONLY, //  DATEONLY for just date (without time)
-        allowNull: false, 
+    ticketPrice: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        defaultValue: 0.0
     },
-    departureTime: {
-        type: DataTypes.TIME, // TIME for just time (without date)
-        allowNull: false, 
+    pickupTime: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false,
     },
     bookingTime: {
         type: DataTypes.DATE,
@@ -51,6 +62,7 @@ const Booking = sequelize.define('Booking', {
     },
 }, {
     tableName: 'bookings',
+    paranoid: true,
     timestamps: true,
 });
 
