@@ -10,7 +10,7 @@ let io;
  */
 export const initSocket = (server) => {
     io = new Server(server);
-
+    console.log("Web socket C
     io.on('connection', (socket) => {
         console.log('A bus connected: ', socket.id);
 

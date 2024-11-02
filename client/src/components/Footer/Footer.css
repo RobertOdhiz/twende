@@ -1,0 +1,36 @@
+/* Footer.css */
+
+.footer-container {
+    background-color: #003135;
+    color: white;
+    padding: 2rem 0;
+}
+
+.footer-container .MuiTypography-root {
+    color: #ffffff;
+}
+
+.footer-container a {
+    color: #b0c4c4;
+    text-decoration: none;
+}
+
+.footer-container a:hover {
+    color: #ffffff;
+}
+
+.footer-container .MuiIconButton-root {
+    color: #b0c4c4;
+    transition: color 0.3s ease;
+}
+
+.footer-container .MuiIconButton-root:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    color: #b0c4c4;
+    font-size: 0.875rem;
+}

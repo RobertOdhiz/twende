@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import { LocationOn, MyLocation } from '@mui/icons-material';
 import { Box, TextField, Button, Typography, Paper, Autocomplete, Fab } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
 import './BusMap.css';
-import { fetchLocationData } from '../utils/dataHandler';
+import { fetchLocationData } from '../../utils/dataHandler';
 
 const BusIconSVG = () => (
     <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -128,12 +128,13 @@ const BusMap = () => {
                 flexDirection: 'column',
                 gap: 3,
                 backgroundColor: '#ffffff',
-                borderRadius: '12px',
+                borderRadius: '16px',
                 ml: 2,
                 mt: 2,
                 mb: 2,
+                boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
             }}>
-                <Typography variant="h5" gutterBottom sx={{ color: '#003135' }}>
+                <Typography variant="h5" gutterBottom sx={{ color: '#003135', fontWeight: 'bold' }}>
                     Tuende
                 </Typography>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -157,10 +158,11 @@ const BusMap = () => {
                             mt: 2,
                             backgroundColor: '#003135',
                             color: 'white',
-                            '&:hover': { backgroundColor: '#004e5f' },
+                            transition: 'background-color 0.3s ease, transform 0.2s ease',
+                            '&:hover': { backgroundColor: '#004e5f', transform: 'scale(1.05)' },
                             borderRadius: '8px',
                             padding: '10px',
-                            fontSize: '16px'
+                            fontSize: '16px',
                         }}
                     >
                         Book Now
@@ -171,20 +173,20 @@ const BusMap = () => {
             <Box sx={{
                 flex: 1,
                 position: 'relative',
-                borderRadius: '12px',
+                borderRadius: '16px',
                 overflow: 'hidden',
                 margin: '16px',
             }}>
                 <MapContainer
                     center={pickupLocation || [0, 0]}
                     zoom={13}
-                    style={{ height: "100%", width: "100%", borderRadius: '12px' }}
+                    style={{ height: "80vh", width: "80vw", borderRadius: '16px' }}
                     zoomControl={false}
                     ref={mapRef}
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; OpenStreetMap contributors'
+                        // attribution='&copy; OpenStreetMap contributors'
                     />
                     <ZoomControl position="topright" />
                     {dropOffLocation && (
@@ -216,7 +218,8 @@ const BusMap = () => {
                         bottom: 16,
                         right: 16,
                         backgroundColor: '#003135',
-                        '&:hover': { backgroundColor: '#004e5f' }
+                        transition: 'background-color 0.3s ease, transform 0.2s ease',
+                        '&:hover': { backgroundColor: '#004e5f', transform: 'scale(1.1)' }
                     }}
                 >
                     <MyLocation />
