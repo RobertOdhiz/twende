@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.config.js'; 
-import Bus from './bus.models.js'; 
 
 const Company = sequelize.define('Company', {
     id: {
@@ -20,14 +19,5 @@ const Company = sequelize.define('Company', {
     tableName: 'companies',
     timestamps: true,
 });
-
-// Relationships
-Company.associate = (models) => {
-    Company.hasMany(models.Bus, {
-        foreignKey: 'companyId', 
-        as: 'buses', // Alias for the relationship
-        onDelete: 'CASCADE', // Automatically delete buses when the company is deleted
-    });
-};
 
 export default Company;

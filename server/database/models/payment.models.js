@@ -15,7 +15,8 @@ const Payment = sequelize.define('Payment', {
             model: Booking,
             key: 'id',
         },
-        onDelete: 'CASCADE', // Optional: Automatically delete payments when booking is deleted
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     },
     amount: {
         type: DataTypes.DECIMAL(10, 2),
@@ -30,25 +31,19 @@ const Payment = sequelize.define('Payment', {
         defaultValue: 'pending',
     },
     transactionId: {
-        type: DataTypes.STRING, // Optional: To store a unique transaction ID for the payment
-        allowNull: true, // Not required, as it may not always be available
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     paymentDate: {
         type: DataTypes.DATE,
-        allowNull: true, // Not required, can be set to null if not specified
-        defaultValue: DataTypes.NOW, // Automatically set to current date/time if not provided
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
     },
 }, {
     tableName: 'payments',
+    paranoid: true,
     timestamps: true,
 });
 
-// Define relationships
-Payment.associate = (models) => {
-    Payment.belongsTo(models.Booking, {
-        foreignKey: 'bookingId',
-        as: 'booking', // Alias for the relationship
-    });
-};
 
 export default Payment;

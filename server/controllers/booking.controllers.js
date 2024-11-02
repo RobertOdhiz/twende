@@ -15,6 +15,7 @@ export const bookBus = async (req, res) => {
         const booking = await bookingService.createBooking(busId, userId);
         return res.status(201).json({
             status: 'success',
+            message: 'Bus booking successful',
             data: booking,
         });
     } catch (error) {

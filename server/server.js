@@ -1,4 +1,3 @@
-import express from 'express';
 import { initSocket } from './controllers/locations.controller.js';
 import { testConnection } from './database/config/database.config.js';
 import app from './src/app.js';
