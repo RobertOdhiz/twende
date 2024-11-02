@@ -1,0 +1,28 @@
+.values{
+    width: 100%;
+    background-color: #AFDDE5;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    height: 60vh;
+
+}
+.values h1{
+    color: #003135;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    margin-top: 10%;
+}
+.values p{
+    width: 50%;
+
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+    color: #003135;
+    font-size: 1.5rem;
+    margin-bottom: 200px;
+}
