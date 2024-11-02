@@ -1,36 +1,87 @@
-/* Footer.css */
-
-.footer-container {
+footer {
+    width: 100%;
     background-color: #003135;
+    display: flex;
     color: white;
-    padding: 2rem 0;
-}
-
-.footer-container .MuiTypography-root {
-    color: #ffffff;
-}
-
-.footer-container a {
-    color: #b0c4c4;
-    text-decoration: none;
-}
-
-.footer-container a:hover {
-    color: #ffffff;
-}
-
-.footer-container .MuiIconButton-root {
-    color: #b0c4c4;
-    transition: color 0.3s ease;
-}
-
-.footer-container .MuiIconButton-root:hover {
-    color: #ffffff;
-}
-
-.footer-bottom {
+    flex-direction: column;
+    justify-content: space-evenly;
     text-align: center;
-    margin-top: 1rem;
-    color: #b0c4c4;
-    font-size: 0.875rem;
+}
+
+.footer{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.footer .column img{
+    height: 200px;
+    margin: 40px;
+    border-radius: 15px;
+    margin-left: 80px;
+    object-fit: cover;
+    box-shadow: 0 0.25em 1em rgba(105, 105, 105, 0.452);
+}
+footer p{
+    color:white;
+    text-align: center;
+    font-size: 10px;
+    justify-content: center;
+    margin: auto;
+    font-weight: lighter;
+    margin-bottom: 2em;
+}
+.footer .column{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    margin: auto;
+    text-decoration: none;
+    margin-top: 20px;
+    padding-bottom: 10px;
+}
+.footer .column .row{
+    display: flex;
+}
+.footer .column svg{
+    color: white;
+    align-items: center;
+    font-size: 50px;
+    margin-left: 50px;
+    margin-top: 40px;
+    justify-content: space-between;
+}
+.footer .column h4{
+    font-size: 16px;
+    font-weight: bold;
+    
+}
+
+.footer .column ul li {
+    list-style: none;
+    text-decoration: none;
+    text-align: left;
+    font-weight: lighter;
+    padding: 0.25em;
+    cursor: pointer;
+}
+.footer .column ul svg{
+    font-size: 20px;
+}
+.footer .column ul li svg{
+    font-size: 20px;
+}
+
+.footer span {
+    margin-left: 1em;
+    cursor: pointer;
+}
+
+.footer i {
+    font-size: 1.25em;
+}
+
+.footer .column {
+    gap: 1em;
 }

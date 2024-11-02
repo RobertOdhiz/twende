@@ -1,8 +1,6 @@
 import React from 'react'
 import './Footer.css'
-import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
-import MessageIcon from '@mui/icons-material/Message';
-import AttachEmailIcon from '@mui/icons-material/AttachEmail';
+
 
 function Footer() {
   return (
