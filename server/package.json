@@ -16,6 +16,7 @@
   "author": "Robert Odhiambo <odhizrober254@gmail.com>, Susan Gicheru <susangicheru07@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
