@@ -1,6 +1,8 @@
 import Bus from "../database/models/bus.models.js";
 import User from "../database/models/user.models.js";
 import axios from 'axios';
+import Bus from '../database/models/bus.models.js';
+
 
 class busService {
     static async getAllBuses() {
@@ -94,16 +96,17 @@ const GOOGLE_MAPS_API_KEY = 'GOOGLE_MAPS_API_KEY';
  * @param {Object} location - The location to find nearby buses.
  * @param {number} location.latitude - The latitude of the location.
  * @param {number} location.longitude - The longitude of the location.
+ * @param {number} radius - The radius to search within (in meters).
  * @returns {Promise<Array>} A promise that resolves to an array of nearby buses.
  */
-export const findNearbyBuses = async (location) => {
+export const findNearbyBuses = async (location, radius = 5000) => {
     const { latitude, longitude } = location;
 
     try {
         const response = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', {
             params: {
                 location: `${latitude},${longitude}`,
-                radius: 5000, // We will adjust the radius if need be. Radius is in metres
+                radius: radius, // Radius in meters
                 type: 'Kiambu Road', // Type of place to search for
                 key: GOOGLE_MAPS_API_KEY,
             },
@@ -121,4 +124,3 @@ export const findNearbyBuses = async (location) => {
         throw new Error('Failed to find nearby buses');
     }
 };
-

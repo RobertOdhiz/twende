@@ -23,6 +23,10 @@ const Bus = sequelize.define('Bus', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    numberOfSeats: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     companyId: {
         type: DataTypes.UUID,
         allowNull: false,

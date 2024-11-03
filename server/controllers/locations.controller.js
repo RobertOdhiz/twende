@@ -1,6 +1,8 @@
 import { Server } from 'socket.io';
 import { handleBadRequest, handleInternalServerError } from '../src/utils/errorHandlers.js';
 import LocationService from '../services/location.services.js';
+import { findNearbyBuses } from '../services/bus.services.js'; 
+
 
 let io;
 
