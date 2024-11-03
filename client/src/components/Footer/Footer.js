@@ -1,25 +1,21 @@
-// Footer.js
 import React from 'react';
-import { Box, Typography, Grid, Link, IconButton } from '@mui/material';
+import { Box, Typography, Grid2, Link, IconButton } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
 import './Footer.css';
 
 const Footer = () => {
     return (
         <Box className="footer-container">
-            <Grid container spacing={3} sx={{ maxWidth: '1200px', mx: 'auto', px: 2 }}>
-                {/* Twende App Info */}
-                <Grid item xs={12} md={4}>
+            <Grid2 container spacing={3} sx={{ maxWidth: '1200px', mx: 'auto', px: 2 }}>
+                <Grid2 item xs={12} md={4}>
                     <Typography variant="h6" gutterBottom>
                         Twende App
                     </Typography>
                     <Typography variant="body2">
                         Revolutionizing urban transportation. Book your bus rides easily and get to your destination on time with Twende!
                     </Typography>
-                </Grid>
-
-                {/* Links */}
-                <Grid item xs={12} md={4}>
+                </Grid2>
+                <Grid2 item xs={12} md={4}>
                     <Typography variant="h6" gutterBottom>
                         Quick Links
                     </Typography>
@@ -35,10 +31,9 @@ const Footer = () => {
                     <Link href="/profile" underline="none">
                         Your Profile
                     </Link>
-                </Grid>
+                </Grid2>
 
-                {/* Social Media */}
-                <Grid item xs={12} md={4}>
+                <Grid2 item xs={12} md={4}>
                     <Typography variant="h6" gutterBottom>
                         Connect with Us
                     </Typography>
@@ -56,8 +51,8 @@ const Footer = () => {
                             <LinkedIn />
                         </IconButton>
                     </Box>
-                </Grid>
-            </Grid>
+                </Grid2>
+            </Grid2>
 
             <Box className="footer-bottom">
                 <Typography variant="body2">
