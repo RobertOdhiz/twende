@@ -7,17 +7,22 @@ dotenv.config();
 const env = process.env.NODE_ENV || 'development';
 const config = envConfigs[env];
 
+// console.log(`Environment: ${env}`);
+// console.log(`Config: ${JSON.stringify(config, null, 2)}`);
+
 let sequelize;
 
-if (config.url) {
+if (config && config.url) {
   sequelize = new Sequelize(config.url, config);
-} else {
+} else if (config) {
   sequelize = new Sequelize(
     config.database,
     config.username,
     config.password,
     config
   );
+} else {
+  throw new Error(`No configuration found for environment: ${env}`);
 }
 
 const testConnection = async () => {

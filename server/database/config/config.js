@@ -12,16 +12,18 @@ export default {
         require: true,
         rejectUnauthorized: false
       }
-    }
+    },
   },
   test: {
     url: process.env.DATABASE_URL,
     dialect: 'postgres',
     dialectModule: pg,
+    logging: false
   },
   production: {
     url: process.env.DATABASE_URL,
     dialect: 'postgres',
     dialectModule: pg,
+    logging: false
   },
 };

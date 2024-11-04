@@ -1,4 +1,4 @@
-import User from "../database/models/user.model.js";
+import User from "../database/models/user.models.js";
 import Location from "../database/models/location.models.js";
 
 class LocationService {
@@ -11,6 +11,7 @@ class LocationService {
         return await Location.findAll({
             include: {
                 model: User,
+                as: 'user',
                 attributes: ['id', 'username', 'email', 'role'],
             },
         });
@@ -21,6 +22,7 @@ class LocationService {
             where: { userId, type: 'passenger' },
             include: {
                 model: User,
+                as: 'user',
                 attributes: ['id', 'username', 'email', 'role'],
             },
         });
@@ -31,6 +33,7 @@ class LocationService {
             where: { id, type: 'stage' },
             include: {
                 model: User,
+                as: 'user',
                 attributes: ['id', 'username', 'email', 'role'],
             },
         });
@@ -41,6 +44,7 @@ class LocationService {
             where: { userId, type: 'driver' },
             include: {
                 model: User,
+                as: 'user',
                 attributes: ['id', 'username', 'email', 'role'],
             },
         });
@@ -51,6 +55,7 @@ class LocationService {
             where: { id },
             include: {
                 model: User,
+                as: 'user',
                 attributes: ['id', 'username', 'email', 'role'],
             },
         });

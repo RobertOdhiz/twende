@@ -15,13 +15,15 @@ function Navbar() {
             </Link>
 
             <div className="desktopMenu">
+
                 {['home', 'about', 'discover'].map((section, index) => (
-                    <ScrollLink key={index} activeClass="active" to={section} spy={true} smooth={true} offset={-100} duration={500} className="desktopMenuListItem"
-                    >
+                    <ScrollLink key={index} activeClass="active" to={section} spy={true} smooth={true} offset={-100} duration={500} className="desktopMenuListItem">
                         {section.charAt(0).toUpperCase() + section.slice(1).replace(/_/g, ' ')}
                     </ScrollLink>
                 ))}
                 <Link to="/book" className="desktopMenuListItem customLink">Book Bus</Link>
+                <Link to="/contact" className="desktopMenuListItem customLink">Contact Us</Link>
+                {/* <Link to="/login" className="desktopMenuListItem customLink">Log In</Link> */}
             </div>
             <div className='sidenav'>
             <Link to="/Signup">
@@ -51,7 +53,7 @@ function Navbar() {
                     </ScrollLink>
                 ))}
                 <Link to="/book" className="listItem customLink" onClick={() => setShowMenu(false)}>Book Bus</Link>
-                <Link to="/login" className="listItem customLink" onClick={() => setShowMenu(false)}>Log In</Link>
+                {/* <Link to="/login" className="listItem customLink" onClick={() => setShowMenu(false)}>Log In</Link> */}
                 <Link to="/contact" className="listItem customLink" onClick={() => setShowMenu(false)}>Contact Us</Link>
                 <Link to="/Signup" className="listItem customLink" onClick={() => setShowMenu(false)}>Get Started</Link>
             </div>
