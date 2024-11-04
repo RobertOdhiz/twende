@@ -1,10 +1,35 @@
-import QRCode from 'qrcode';
 import axios from 'axios';
 import Payment from '../database/models/payment.models.js';
 import Booking from '../database/models/booking.models.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
+
+/**
+ * Generates the M-Pesa API key dynamically for each request.
+ * @returns {Promise<String>} The access token (API key) for M-Pesa.
+ * @throws {Error} Throws an error if API key generation fails.
+ */
+const generateMpesaApiKey = async () => {
+    const consumerKey = process.env.SAFARICOM_CONSUMER_KEY;
+    const consumerSecret = process.env.SAFARICOM_CONSUMER_SECRET;
+    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
+
+    try {
+        const response = await axios.get(
+            'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',
+            {
+                headers: {
+                    Authorization: `Basic ${auth}`,
+                },
+            }
+        );
+
+        return response.data.access_token;
+    } catch (error) {
+        throw new Error('Failed to generate M-Pesa API key: ' + error.message);
+    }
+};
 
 /**
  * Sends a request to the M-Pesa API to process a payment.
@@ -16,7 +41,7 @@ dotenv.config();
  */
 const processMpesaPayment = async (phoneNumber, amount, reference) => {
     const apiUrl = 'https://sandbox.safaricom.co.ke/mpesa/';
-    const apiKey = process.env.MPESA_API_KEY;
+    const apiKey = await generateMpesaApiKey();
 
     const requestBody = {
         phoneNumber,
@@ -80,37 +105,18 @@ export const processPayment = async (bookingId, amount, paymentMethod, phoneNumb
 };
 
 /**
- * Creates a QR code for payment confirmation.
- * @param {String} bookingId - The ID of the booking.
- * @returns {Promise<String>} The QR code image data as a base64 string.
- * @throws {Error} Throws an error if QR code generation fails.
- */
-export const createQRCode = async (bookingId) => {
-    const qrCodeText = `Payment confirmed for booking ${bookingId}`;
-    const qrCodeImage = await QRCode.toDataURL(qrCodeText, {
-        errorCorrectionLevel: 'H',
-        type: 'image/png',
-    });
-
-    return qrCodeImage;
-};
-
-/**
  * Confirms cash payment has been received.
  * @param {String} bookingId - The ID of the booking.
  * @returns {Promise<Object>} The confirmation object.
  * @throws {Error} Throws an error if confirmation fails.
  */
 export const confirmCashPayment = async (bookingId) => {
-    // Logic to confirm that cash payment has been received
-    // This could involve checking the payment status in the database
     const payment = await Payment.findOne({ where: { bookingId, paymentMethod: 'cash' } });
     
     if (!payment) {
         throw new Error('No cash payment found for this booking');
     }
 
-    // Update payment status to confirmed
     await Payment.update(
         { paymentStatus: 'confirmed' },
         { where: { bookingId, paymentMethod: 'cash' } }
@@ -134,7 +140,6 @@ export const getPaymentStatus = async (paymentId) => {
 export default {
     processPayment,
     processMpesaPayment,
-    createQRCode,
     confirmCashPayment,
     getPaymentStatus,
 };

@@ -1,7 +1,95 @@
+import Bus from "../database/models/bus.models.js";
+import User from "../database/models/user.models.js";
 import axios from 'axios';
 import Bus from '../database/models/bus.models.js';
 
-const GOOGLE_MAPS_API_KEY = 'GOOGLE_MAPS_API_KEY';
+
+class busService {
+    static async getAllBuses() {
+        return await Bus.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'driver',
+                    attributes: ['id', 'email', 'firstName', 'lastName', 'role'],
+                },
+            ],
+        });
+    }
+
+    static async assignDriverToBus(busId, driverId) {
+        const bus = await Bus.findByPk(busId);
+        if (!bus) {
+            throw new Error('Bus not found');
+        }
+
+        bus.driverId = driverId;
+        await bus.save();
+        return bus;
+    }
+
+    static async updateBusServiceStatus(busId, onService) {
+        const bus = await Bus.findByPk(busId);
+        if (!bus) {
+            throw new Error('Bus not found');
+        }
+
+        bus.onService = onService;
+        await bus.save();
+        return bus;
+    }
+
+    static async setBusOutOfService(busId) {
+        const bus = await Bus.findByPk(busId);
+        if (!bus) {
+            throw new Error('Bus not found');
+        }
+
+        bus.onService = false;
+        await bus.save();
+        return bus;
+    }
+
+    static async getBusById(busId) {
+        const bus = await Bus.findByPk(busId, {
+            include: [
+                {
+                    model: User,
+                    as: 'driver',
+                    attributes: ['id', 'email', 'firstName', 'lastName', 'role'],
+                },
+            ],
+        });
+        if (!bus) {
+            throw new Error('Bus not found');
+        }
+        return bus;
+    }
+
+    static async deleteBus(busId) {
+        const bus = await Bus.findByPk(busId);
+        if (!bus) {
+            throw new Error('Bus not found');
+        }
+
+        await bus.destroy();
+        return { message: 'Bus deleted successfully' };
+    }
+
+    static async createBus(busData) {
+        console.log('Bus Data in service: ', busData);
+        if (!busData || !busData.plateNumber || !busData.capacity || !busData.companyId) {
+            throw new Error('Invalid bus data. Plate number, capacity, and company ID are required.');
+        }
+
+        const newBus = await Bus.create(busData);
+        return newBus;
+    }
+}
+
+export default busService;
+
+const GOOGLE_MAPS_API_KEY = 'GOOGLE_MAPS_API_KEY'; 
 
 /**
  * Finds nearby buses based on the provided location.
@@ -35,39 +123,4 @@ export const findNearbyBuses = async (location, radius = 5000) => {
         console.error('Error finding nearby buses:', error);
         throw new Error('Failed to find nearby buses');
     }
-};
-
-/**
- * Create a new bus.
- * @param {Object} busData - The data for the new bus.
- * @returns {Promise<Object>} The created bus.
- */
-export const createBus = async (busData) => {
-    try {
-        const newBus = await Bus.create(busData);
-        return newBus;
-    } catch (error) {
-        console.error('Error creating bus:', error);
-        throw new Error('Failed to create bus');
-    }
-};
-
-/**
- * Get all buses.
- * @returns {Promise<Array>} The list of all buses.
- */
-export const getAllBuses = async () => {
-    try {
-        const buses = await Bus.find();
-        return buses;
-    } catch (error) {
-        console.error('Error fetching buses:', error);
-        throw new Error('Failed to fetch buses');
-    }
-};
-
-export default {
-    findNearbyBuses,
-    createBus,
-    getAllBuses,
 };
