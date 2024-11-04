@@ -17,23 +17,24 @@ const Ticket = sequelize.define('Ticket', {
     },
     discountPercentage: {
         type: DataTypes.FLOAT,
-        allowNull: true, // Optional field for discounts
+        allowNull: true,
         defaultValue: 0.0,
     },
     promotionCode: {
         type: DataTypes.STRING,
-        allowNull: true, // Optional field for promotion codes
+        allowNull: true,
     },
     validFrom: {
         type: DataTypes.DATE,
-        allowNull: true, // Optional field for when the ticket is valid from
+        allowNull: true,
     },
     validUntil: {
         type: DataTypes.DATE,
-        allowNull: true, // Optional field for when the ticket is valid until
+        allowNull: true,
     },
 }, {
     tableName: 'tickets',
+    paranoid: true,
     timestamps: true,
 });
 
