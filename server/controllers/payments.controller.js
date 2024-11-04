@@ -7,6 +7,8 @@ import axios from 'axios';
 
 /**
  * Initiates a cash payment for a booking.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
  */
 export const initiateCashPayment = async (req, res) => {
     const { bookingId, amount, busDetails } = req.body;
@@ -34,6 +36,8 @@ export const initiateCashPayment = async (req, res) => {
 
 /**
  * Confirms that the cash payment has been received.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
  */
 export const confirmCashPayment = async (req, res) => {
     const { bookingId } = req.body;
@@ -51,6 +55,8 @@ export const confirmCashPayment = async (req, res) => {
 
 /**
  * Initiates a payment (M-Pesa or cash).
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
  */
 export const initiatePayment = async (req, res) => {
     const { bookingId, amount, paymentMethod, phoneNumber } = req.body;
@@ -73,6 +79,9 @@ export const initiatePayment = async (req, res) => {
 
 /**
  * Initiates an STK push for M-Pesa.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
  */
 export const initiatePushSTK = async (req, res, next) => {
     const { bookingId, amount, phoneNumber } = req.body;
@@ -113,6 +122,8 @@ export const initiatePushSTK = async (req, res, next) => {
 
 /**
  * Handles the STK push callback.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
  */
 export const pushSTKCallback = async (req, res) => {
     try {
