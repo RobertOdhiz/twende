@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
+import 'leaflet-routing-machine';
 import { LocationOn, MyLocation } from '@mui/icons-material';
 import { Box, TextField, Button, Typography, Paper, Autocomplete, Fab } from '@mui/material';
 import 'leaflet/dist/leaflet.css';
@@ -54,6 +57,22 @@ const LocationMarker = ({ position, label, color }) => {
     );
 };
 
+const getLocationName = async (lat, lon) => {
+    try {
+        const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+            params: {
+                lat,
+                lon,
+                format: 'json'
+            }
+        });
+        return response.data.display_name;
+    } catch (error) {
+        console.error('Error fetching location name:', error);
+        return `${lat}, ${lon}`;
+    }
+};
+
 const BusMap = () => {
     const [locations, setLocations] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
@@ -62,6 +81,16 @@ const BusMap = () => {
     const [busLocations, setBusLocations] = useState([]);
     const [pickupStations, setPickupStations] = useState([]);
     const mapRef = useRef(null);
+    const routingControlRef = useRef(null);
+    const navigate = useNavigate(); 
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (userLocation && dropOffLocation) {
+            navigate('/trip-list'); 
+        }
+    };
+
 
     const predefinedLocations = [
         { name: 'Karen', coords: [-1.2921, 36.8219] },
@@ -79,7 +108,7 @@ const BusMap = () => {
                 setBusLocations(filteredLocations.filter(location => location.type === 'driver'));
                 setPickupStations(filteredLocations.filter(location => location.type === 'stage'));
             } catch (err) {
-                console.log('Error fetching locations: ', err);
+                console.log('Error fetching locations:', err);
             }
         };
 
@@ -87,11 +116,15 @@ const BusMap = () => {
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (position) => {
+                async (position) => {
                     const { latitude, longitude } = position.coords;
-                    const userCoords = [latitude, longitude];
-                    setUserLocation(userCoords);
-                    setPickupLocation(userCoords);
+                    if (latitude && longitude) {
+                        setUserLocation([latitude, longitude]);
+                        const locationName = await getLocationName(latitude, longitude);
+                        setPickupLocation(locationName);
+                    } else {
+                        console.warn("Invalid user coordinates.");
+                    }
                 },
                 (error) => console.log('Error getting user location:', error)
             );
@@ -100,127 +133,83 @@ const BusMap = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (userLocation && dropOffLocation && mapRef.current) {
+            if (!userLocation[0] || !userLocation[1] || !dropOffLocation[0] || !dropOffLocation[1]) {
+                console.warn("Invalid coordinates for routing.");
+                return;
+            }
+
+            if (routingControlRef.current) {
+                mapRef.current.removeControl(routingControlRef.current);
+            }
+            routingControlRef.current = L.Routing.control({
+                waypoints: [
+                    L.latLng(userLocation[0], userLocation[1]),
+                    L.latLng(dropOffLocation[0], dropOffLocation[1])
+                ],
+                lineOptions: {
+                    styles: [{ color: '#003135', weight: 6 }]
+                },
+                createMarker: () => null
+            }).addTo(mapRef.current);
+        }
+    }, [userLocation, dropOffLocation]);
+
     const handleDropOffChange = (event, value) => {
         const location = predefinedLocations.find(loc => loc.name === value);
-        if (location) setDropOffLocation(location.coords);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (userLocation && dropOffLocation) {
-            console.log('Booking confirmed from', userLocation, 'to', dropOffLocation);
+        if (location && location.coords) {
+            setDropOffLocation(location.coords);
+        } else {
+            console.warn("Drop-off location not found or invalid.");
         }
     };
+
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (userLocation && dropOffLocation) {
+    //         console.log('Booking confirmed from', userLocation, 'to', dropOffLocation);
+    //     }
+    // };
 
     const handleGetLocation = () => {
         if (userLocation && mapRef.current) {
             const map = mapRef.current;
-            map.setView(userLocation, 15); // Center map on user location with a zoom level of 15
+            map.setView(userLocation, 15);
         }
     };
 
     return (
         <Box sx={{ display: 'flex', height: '100vh', backgroundColor: '#f0f4f8' }}>
-            <Paper elevation={3} sx={{
-                width: '30%',
-                p: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 3,
-                backgroundColor: '#ffffff',
-                borderRadius: '16px',
-                ml: 2,
-                mt: 2,
-                mb: 2,
-                boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
-            }}>
+            <Paper elevation={3} sx={{width: '30%',p: 4,display: 'flex',flexDirection: 'column',gap: 3,backgroundColor: '#ffffff',borderRadius: '16px',ml: 2,mt: 2,mb: 2,boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',}}>
                 <Typography variant="h5" gutterBottom sx={{ color: '#003135', fontWeight: 'bold' }}>
                     Tuende
                 </Typography>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <TextField
-                        label="Pick-up Location"
-                        variant="outlined"
-                        fullWidth
-                        value={userLocation ? `${userLocation[0]}, ${userLocation[1]}` : ''}
-                        InputProps={{ readOnly: true }}
-                    />
-                    <Autocomplete
-                        options={predefinedLocations.map(loc => loc.name)}
-                        onChange={handleDropOffChange}
-                        renderInput={(params) => <TextField {...params} label="Drop-off Location" variant="outlined" />}
-                    />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        sx={{
-                            mt: 2,
-                            backgroundColor: '#003135',
-                            color: 'white',
-                            transition: 'background-color 0.3s ease, transform 0.2s ease',
-                            '&:hover': { backgroundColor: '#004e5f', transform: 'scale(1.05)' },
-                            borderRadius: '8px',
-                            padding: '10px',
-                            fontSize: '16px',
-                        }}
-                    >
+                    <TextField label="Pick-up Location" variant="outlined" fullWidth value={pickupLocation || ''} InputProps={{ readOnly: true }} />
+                    <Autocomplete options={predefinedLocations.map(loc => loc.name)} onChange={handleDropOffChange} renderInput={(params) => <TextField {...params} label="Drop-off Location" variant="outlined" />} />
+                    <Button type="submit" variant="contained" fullWidth sx={{mt: 2,backgroundColor: '#003135',color: 'white',transition: 'background-color 0.3s ease, transform 0.2s ease','&:hover': { backgroundColor: '#004e5f', transform: 'scale(1.05)' },borderRadius: '8px',padding: '10px',fontSize: '16px',}}>
                         Book Now
                     </Button>
                 </form>
             </Paper>
 
-            <Box sx={{
-                flex: 1,
-                position: 'relative',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                margin: '16px',
-            }}>
-                <MapContainer
-                    center={pickupLocation || [0, 0]}
-                    zoom={13}
-                    style={{ height: "80vh", width: "80vw", borderRadius: '16px' }}
-                    zoomControl={false}
-                    ref={mapRef}
-                >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        // attribution='&copy; OpenStreetMap contributors'
-                    />
+            <Box sx={{ flex: 1,position: 'relative',borderRadius: '16px',overflow: 'hidden',margin: '16px',}}>
+                <MapContainer center={userLocation || [0, 0]} zoom={13} style={{ height: "80vh", width: "80vw", borderRadius: '16px' }} zoomControl={false} ref={mapRef} >
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <ZoomControl position="topright" />
-                    {dropOffLocation && (
-                        <Polyline
-                            positions={[pickupLocation, dropOffLocation]}
-                            pathOptions={{ color: '#003135', weight: 5, dashArray: '5, 10' }}
-                        />
-                    )}
-                    {pickupLocation && (
-                        <LocationMarker position={pickupLocation} label="Pick-up" color="#1976d2" />
+                    {userLocation && (
+                        <LocationMarker position={userLocation} label="Pick-up" color="#1976d2" />
                     )}
                     {dropOffLocation && (
-                        <LocationMarker position={dropOffLocation} label="Drop-off" color="red" />
+                        <LocationMarker position={dropOffLocation} label="Drop-off" color="green" />
                     )}
-                    {busLocations.map(bus => (
-                        <BusMarker key={bus.id} position={bus.position} name={bus.name} />
-                    ))}
-                    {pickupStations.map(station => (
-                        <LocationMarker key={station.id} position={station.position} label="Station" color="green" />
+                    {busLocations.map((location, index) => (
+                        <BusMarker key={index} position={[location.lat, location.lon]} name={location.name} />
                     ))}
                 </MapContainer>
-
-                <Fab
-                    color="primary"
-                    aria-label="my-location"
-                    onClick={handleGetLocation}
-                    sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 16,
-                        backgroundColor: '#003135',
-                        transition: 'background-color 0.3s ease, transform 0.2s ease',
-                        '&:hover': { backgroundColor: '#004e5f', transform: 'scale(1.1)' }
-                    }}
+                <Fab color="primary" aria-label="locate" onClick={handleGetLocation}
+                    sx={{position: 'absolute',bottom: 16,right: 16,backgroundColor: '#004e5f',color: 'white','&:hover': { backgroundColor: '#003135' }}}
                 >
                     <MyLocation />
                 </Fab>

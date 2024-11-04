@@ -1,13 +1,12 @@
-/* Navbar Container */
 .navbar {
     background-color: #003135;
     padding: 1.5rem 3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
+    position: relative;
     top: 0;
-    z-index: 3;
+    z-index: 10;
     font-family: 'Quicksand', sans-serif;
     font-weight: 650;
     color: #AFDDE5;
@@ -53,7 +52,7 @@
     font-weight: bold;
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 20px;
+    border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease;
 }
@@ -63,7 +62,6 @@
     color: #003135;
 }
 
-/* Mobile Menu */
 .mobMenu {
     display: none;
     color: #AFDDE5;
@@ -101,7 +99,19 @@
     color: #003135;
 }
 
-/* Responsive Adjustments */
+.loginbtn {
+    background-color: transparent;
+    color: #8ABFB2;
+}
+.sidenav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5em;
+    border-radius: 4px;
+    gap: 1em;
+}
+
 @media screen and (max-width: 720px) {
     .desktopMenu {
         display: none;

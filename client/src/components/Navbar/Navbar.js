@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -16,17 +15,9 @@ function Navbar() {
             </Link>
 
             <div className="desktopMenu">
-                {['home','about', 'discover'].map((section, index) => (
-                    <ScrollLink
-                        key={index}
-                        activeClass="active"
-                        to={section}
-                        spy={true}
-                        smooth={true}
-                        offset={-100}
-                        duration={500}
-                        className="desktopMenuListItem"
-                    >
+
+                {['home', 'about', 'discover'].map((section, index) => (
+                    <ScrollLink key={index} activeClass="active" to={section} spy={true} smooth={true} offset={-100} duration={500} className="desktopMenuListItem">
                         {section.charAt(0).toUpperCase() + section.slice(1).replace(/_/g, ' ')}
                     </ScrollLink>
                 ))}
@@ -34,12 +25,18 @@ function Navbar() {
                 <Link to="/contact" className="desktopMenuListItem customLink">Contact Us</Link>
                 {/* <Link to="/login" className="desktopMenuListItem customLink">Log In</Link> */}
             </div>
-
-            <Link to="/Signup" className="getStartedBtn">
-                <button className="customButton">
-                    <AccountCircleIcon /> Get Started
+            <div className='sidenav'>
+            <Link to="/Signup">
+                <button className='loginbtn'>
+                    Log in
                 </button>
             </Link>
+            <Link to="/Signup" className="getStartedBtn">
+                <button className='customButton'>
+                    Get Started
+                </button>
+            </Link>
+            </div>
 
             <div className="mobMenu">
                 {showMenu ? (
@@ -50,18 +47,8 @@ function Navbar() {
             </div>
 
             <div className={`navMenu ${showMenu ? "show" : ""}`}>
-                {['home', 'about', 'discover', 'whytwende', 'values', 'vision'].map((section, index) => (
-                    <ScrollLink
-                        key={index}
-                        activeClass="active"
-                        to={section}
-                        spy={true}
-                        smooth={true}
-                        offset={-50}
-                        duration={500}
-                        className="listItem"
-                        onClick={() => setShowMenu(false)}
-                    >
+                {['home', 'about', 'discover' ].map((section, index) => (
+                    <ScrollLink key={index} activeClass="active" to={section} spy={true} smooth={true} offset={-50} duration={500} className="listItem" onClick={() => setShowMenu(false)} >
                         {section.charAt(0).toUpperCase() + section.slice(1)}
                     </ScrollLink>
                 ))}

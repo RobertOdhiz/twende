@@ -7,9 +7,9 @@ function About() {
         <div className='about-container'>
             <img src={aboutImage} alt="About Us" className='about-image'/>
             <div className='about-text'>
-                <h2>About TWENDE</h2>
+                <h2>About Twende</h2>
                 <p>
-                    <span className="highlight">TWENDE</span> is dedicated to providing fast, convenient, and reliable travel options. 
+                    <span className="highlight">Twende</span> is dedicated to providing fast, convenient, and reliable travel options. 
                     Our commitment is to ensure your journeys are smooth and enjoyable, connecting you to destinations efficiently and comfortably.
                 </p>
                 <p>

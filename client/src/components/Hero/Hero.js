@@ -7,7 +7,7 @@ function Hero() {
     return (
         <div className='container-home' id='home'>
             <img src={heroImage} alt="" className='heroimage'/>
-            <div className="overlay-gradient"></div> {/* Gradient Overlay */}
+            <div className="overlay-gradient"></div> 
             <div className="herotext">
                 <h1>TWENDE</h1>
                 <p className="tagline" id='tagline'> Fast, Convenient, <span>Reliable</span></p>
