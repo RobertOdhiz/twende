@@ -1,7 +1,6 @@
 import Bus from "../database/models/bus.models.js";
 import User from "../database/models/user.models.js";
 import axios from 'axios';
-import Bus from '../database/models/bus.models.js';
 
 
 class busService {
@@ -11,7 +10,7 @@ class busService {
                 {
                     model: User,
                     as: 'driver',
-                    attributes: ['id', 'email', 'firstName', 'lastName', 'role'],
+                    attributes: ['id', 'email', 'role'],
                 },
             ],
         });

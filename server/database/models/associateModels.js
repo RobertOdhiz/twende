@@ -5,6 +5,7 @@ import Company from './company.models.js';
 import Booking from './booking.models.js';
 import Payment from './payment.models.js';
 import QRCode from './qr_code.models.js';
+import Ticket from './ticket.models.js';
 
 const associateModels = () => {
     // User and Location Associations
@@ -105,6 +106,16 @@ const associateModels = () => {
     Location.hasMany(Booking, {
         foreignKey: 'dropoffLocation',
         as: 'dropoffBookings',
+    });
+
+    // Ticket and Booking Associations
+    Ticket.hasMany(Booking, {
+        foreignKey: 'ticketId',
+        as: 'bookings',
+    });
+    Booking.belongsTo(Ticket, {
+        foreignKey: 'ticketId',
+        as: 'ticket',
     });
 };
 

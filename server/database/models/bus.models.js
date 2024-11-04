@@ -41,6 +41,10 @@ const Bus = sequelize.define('Bus', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    seatsBooked: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+    },
     electric: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

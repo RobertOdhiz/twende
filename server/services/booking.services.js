@@ -1,141 +1,113 @@
 import Booking from '../database/models/booking.models.js';
 import Bus from '../database/models/bus.models.js';
-import User from '../database/models/user.models.js';
-import Location from '../database/models/location.models.js';
+import { sequelize } from '../database/config/database.config.js';
 
-class BookingService {
-    /**
-     * Creates a booking for a bus.
-     * @param {String} busId - The ID of the bus.
-     * @param {String} userId - The ID of the user making the booking.
-     * @param {String} pickupLocation - ID of the pickup location.
-     * @param {String} dropoffLocation - ID of the dropoff location.
-     * @param {Float} ticketPrice - Price of the ticket.
-     * @returns {Promise<Object>} The created booking object.
-     * @throws {Error} Throws an error if the booking creation fails.
-     */
-    static async createBooking(busId, userId, pickupLocation, dropoffLocation, ticketPrice) {
-        const bus = await Bus.findByPk(busId);
-        if (!bus) throw new Error('Bus not found');
+const BookingController = {
+    createBooking: async (req, res) => {
+        const { userId, busId, ticketId, pickupLocation, dropoffLocation, ticketPrice, pickupTime, bookingTime } = req.body;
 
-        const isAvailable = await this.checkBusAvailability(busId);
-        if (!isAvailable) throw new Error('Bus is fully booked');
+        let transaction;
 
-        const booking = await Booking.create({
-            busId,
-            userId,
-            pickupLocation,
-            dropoffLocation,
-            ticketPrice,
-            paymentStatus: 'pending',
-        });
+        try {
+            // Start a transaction
+            transaction = await sequelize.transaction();
 
-        return booking;
-    }
+            // Find the bus by ID
+            const bus = await Bus.findByPk(busId, { transaction });
+            if (!bus) {
+                return res.status(404).json({ error: 'Bus not found' });
+            }
 
-    /**
-     * Fetches all bookings with associated bus and user details.
-     * @returns {Promise<Array>} - List of all bookings.
-     */
-    static async getAllBookings() {
-        return await Booking.findAll({
-            include: [
-                { model: Bus, attributes: ['plateNumber', 'capacity', 'electric', 'onService'] },
-                { model: User, attributes: ['firstName', 'lastName', 'email'] },
-                { model: Location, as: 'pickupLocationDetails', attributes: ['name'] },
-                { model: Location, as: 'dropoffLocationDetails', attributes: ['name'] },
-            ],
-        });
-    }
+            // Check if there are available seats
+            if (bus.seatsBooked >= bus.numberOfSeats) {
+                return res.status(400).json({ error: 'No available seats on this bus' });
+            }
 
-    /**
-     * Fetches all bookings for a specific bus.
-     * @param {String} busId - The ID of the bus.
-     * @returns {Promise<Array>} - List of bookings for the specified bus.
-     */
-    static async getBookingsForBus(busId) {
-        return await Booking.findAll({
-            where: { busId },
-            include: [
-                { model: Bus, attributes: ['plateNumber', 'capacity', 'electric', 'onService'] },
-                { model: User, attributes: ['firstName', 'lastName', 'email'] },
-                { model: Location, as: 'pickupLocationDetails', attributes: ['name'] },
-                { model: Location, as: 'dropoffLocationDetails', attributes: ['name'] },
-            ],
-        });
-    }
+            // Create the booking
+            const booking = await Booking.create({
+                userId,
+                busId,
+                ticketId,
+                pickupLocation,
+                dropoffLocation,
+                ticketPrice,
+                pickupTime,
+                bookingTime,
+            }, { transaction });
 
-    /**
-     * Fetches a single booking by booking ID.
-     * @param {String} bookingId - The ID of the booking.
-     * @returns {Promise<Object>} - The booking object.
-     */
-    static async getBookingById(bookingId) {
-        return await Booking.findByPk(bookingId, {
-            include: [
-                { model: Bus, attributes: ['plateNumber', 'capacity', 'electric', 'onService'] },
-                { model: User, attributes: ['firstName', 'lastName', 'email'] },
-                { model: Location, as: 'pickupLocationDetails', attributes: ['name'] },
-                { model: Location, as: 'dropoffLocationDetails', attributes: ['name'] },
-            ],
-        });
-    }
+            // Increment the seatsBooked count
+            bus.seatsBooked += 1;
+            await bus.save({ transaction });
 
-    /**
-     * Fetches all bookings made by a specific user.
-     * @param {String} userId - The ID of the user.
-     * @returns {Promise<Array>} - List of bookings for the specified user.
-     */
-    static async getBookingsForUser(userId) {
-        return await Booking.findAll({
-            where: { userId },
-            include: [
-                { model: Bus, attributes: ['plateNumber', 'capacity', 'electric', 'onService'] },
-                { model: User, attributes: ['firstName', 'lastName', 'email'] },
-                { model: Location, as: 'pickupLocationDetails', attributes: ['name'] },
-                { model: Location, as: 'dropoffLocationDetails', attributes: ['name'] },
-            ],
-        });
-    }
+            // Commit the transaction
+            await transaction.commit();
 
-    /**
-     * Updates a booking's details.
-     * @param {String} bookingId - The ID of the booking to update.
-     * @param {Object} updateData - Data to update in the booking.
-     * @returns {Promise<Object>} - The updated booking object.
-     */
-    static async updateBooking(bookingId, updateData) {
-        const booking = await Booking.findByPk(bookingId);
-        if (!booking) throw new Error('Booking not found');
+            res.status(201).json({ booking });
+        } catch (error) {
+            if (transaction) await transaction.rollback();
+            console.error('Error creating booking:', error);
+            res.status(500).json({ error: 'An error occurred while creating the booking' });
+        }
+    },
 
-        await booking.update(updateData);
-        return booking;
-    }
+    getBookingById: async (req, res) => {
+        const { id } = req.params;
 
-    /**
-     * Deletes a booking by ID.
-     * @param {String} bookingId - The ID of the booking to delete.
-     * @returns {Promise<void>}
-     */
-    static async deleteBooking(bookingId) {
-        const booking = await Booking.findByPk(bookingId);
-        if (!booking) throw new Error('Booking not found');
+        try {
+            const booking = await Booking.findByPk(id, {
+                include: [
+                    { model: Bus, as: 'bus' },
+                    { model: User, as: 'user', attributes: ['id', 'username', 'email', 'role'] },
+                    { model: Ticket, as: 'ticket' },
+                ]
+            });
 
-        await booking.destroy();
-    }
+            if (!booking) {
+                return res.status(404).json({ error: 'Booking not found' });
+            }
 
-    /**
-     * Checks the availability of a bus.
-     * @param {String} busId - The ID of the bus.
-     * @returns {Promise<Boolean>} - True if the bus has available seats, false otherwise.
-     */
-    static async checkBusAvailability(busId) {
-        const totalBookings = await Booking.count({ where: { busId } });
-        const bus = await Bus.findByPk(busId);
-        if (!bus) throw new Error('Bus not found');
+            res.status(200).json({ booking });
+        } catch (error) {
+            console.error('Error fetching booking:', error);
+            res.status(500).json({ error: 'An error occurred while fetching the booking' });
+        }
+    },
 
-        return totalBookings < bus.capacity;
-    }
-}
+    deleteBooking: async (req, res) => {
+        const { id } = req.params;
 
-export default BookingService;
+        let transaction;
+
+        try {
+            // Start a transaction
+            transaction = await sequelize.transaction();
+
+            // Find the booking
+            const booking = await Booking.findByPk(id, { transaction });
+            if (!booking) {
+                return res.status(404).json({ error: 'Booking not found' });
+            }
+
+            // Find the associated bus and decrement seatsBooked
+            const bus = await Bus.findByPk(booking.busId, { transaction });
+            if (bus && bus.seatsBooked > 0) {
+                bus.seatsBooked -= 1;
+                await bus.save({ transaction });
+            }
+
+            // Soft delete the booking
+            await booking.destroy({ transaction });
+
+            // Commit the transaction
+            await transaction.commit();
+
+            res.status(200).json({ message: 'Booking deleted successfully' });
+        } catch (error) {
+            if (transaction) await transaction.rollback();
+            console.error('Error deleting booking:', error);
+            res.status(500).json({ error: 'An error occurred while deleting the booking' });
+        }
+    },
+};
+
+export default BookingController;
