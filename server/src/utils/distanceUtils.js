@@ -1,22 +1,18 @@
-import { Client } from '@googlemaps/google-maps-services-js';
 
-const client = new Client({});
+export const getDistance = (origin, destination) => {
+    const toRad = (value) => (value * Math.PI) / 180;
 
-export const getDistance = async (origin, destination) => {
-    try {
-        const response = await client.distancematrix({
-            params: {
-                origins: [origin],
-                destinations: [destination],
-                key: process.env.GOOGLE_MAPS_API_KEY, // Store your API key in an environment variable
-            },
-            timeout: 1000, // milliseconds
-        });
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRad(destination.lat - origin.lat);
+    const dLon = toRad(destination.lng - origin.lng);
+    const lat1 = toRad(origin.lat);
+    const lat2 = toRad(destination.lat);
 
-        const distance = response.data.rows[0].elements[0].distance.value; // distance in meters
-        return distance / 1000; // Convert to kilometers
-    } catch (error) {
-        console.error("Error fetching distance:", error);
-        throw error; // Handle the error appropriately
-    }
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in kilometers
 };

@@ -13,6 +13,11 @@ dotenv.config();
 const generateMpesaApiKey = async () => {
     const consumerKey = process.env.SAFARICOM_CONSUMER_KEY;
     const consumerSecret = process.env.SAFARICOM_CONSUMER_SECRET;
+
+    if (!consumerKey || !consumerSecret) {
+        throw new Error('Consumer Key and Consumer Secret must be set in the environment variables');
+    }
+
     const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
 
     try {
@@ -75,6 +80,7 @@ const processMpesaPayment = async (phoneNumber, amount, reference) => {
  */
 export const processPayment = async (bookingId, amount, paymentMethod, phoneNumber = null, busDetails = null) => {
     let payment;
+    
     if (paymentMethod === 'mpesa') {
         const reference = `Booking-${bookingId}`;
         const paymentResponse = await processMpesaPayment(phoneNumber, amount, reference);
@@ -93,7 +99,7 @@ export const processPayment = async (bookingId, amount, paymentMethod, phoneNumb
             bookingId,
             amount,
             paymentMethod,
-            paymentStatus: 'completed', 
+            paymentStatus: 'completed',
         });
 
         await Booking.update({ status: 'paid', busDetails }, { where: { id: bookingId } });
@@ -117,7 +123,7 @@ export const confirmCashPayment = async (bookingId) => {
         throw new Error('No cash payment found for this booking');
     }
 
-    await Payment.update(
+ await Payment.update(
         { paymentStatus: 'confirmed' },
         { where: { bookingId, paymentMethod: 'cash' } }
     );
