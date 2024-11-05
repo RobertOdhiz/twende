@@ -1,4 +1,4 @@
-
+//Haversine formula
 export const getDistance = (origin, destination) => {
     const toRad = (value) => (value * Math.PI) / 180;
 
