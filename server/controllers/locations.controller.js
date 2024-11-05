@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { handleBadRequest, handleInternalServerError } from '../src/utils/errorHandlers.js';
 import LocationService from '../services/location.services.js';
 import { findNearbyBuses } from '../services/bus.services.js'; 
-
+import { getDistance } from '../src/utils/distanceUtils.js'; 
 
 let io;
 
@@ -55,6 +55,12 @@ export const createLocation = async (req, res) => {
         });
 
         io.emit('locationCreated', newLocation);
+
+        // Example of using the distance calculation
+        const origin = { lat: latitude, lng: longitude }; // New location coordinates
+        const destination = { lat: 0, lng: 0 }; // Example destination coordinates
+        const distance = getDistance(origin, destination);
+        console.log(`Distance to destination: ${distance} km`);
 
         return res.status(201).json({ status: 'success', data: newLocation });
     } catch (error) {
