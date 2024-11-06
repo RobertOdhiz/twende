@@ -26,7 +26,7 @@ function Navbar() {
                 {/* <Link to="/login" className="desktopMenuListItem customLink">Log In</Link> */}
             </div>
             <div className='sidenav'>
-            <Link to="/Signup">
+            <Link to="/login">
                 <button className='loginbtn'>
                     Log in
                 </button>
@@ -53,8 +53,8 @@ function Navbar() {
                     </ScrollLink>
                 ))}
                 <Link to="/book" className="listItem customLink" onClick={() => setShowMenu(false)}>Book Bus</Link>
-                {/* <Link to="/login" className="listItem customLink" onClick={() => setShowMenu(false)}>Log In</Link> */}
                 <Link to="/contact" className="listItem customLink" onClick={() => setShowMenu(false)}>Contact Us</Link>
+                <Link to="/login" className="listItem customLink" onClick={() => setShowMenu(false)}>Log In</Link>
                 <Link to="/Signup" className="listItem customLink" onClick={() => setShowMenu(false)}>Get Started</Link>
             </div>
         </nav>
