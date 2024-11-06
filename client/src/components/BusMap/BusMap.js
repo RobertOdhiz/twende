@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import 'leaflet-routing-machine';
 import { LocationOn, MyLocation } from '@mui/icons-material';
 import { Box, TextField, Button, Typography, Paper, Autocomplete, Fab } from '@mui/material';
+import { fetchData } from '../../utils/dataHandler';
 import 'leaflet/dist/leaflet.css';
 import './BusMap.css';
-import { fetchLocationData } from '../../utils/dataHandler';
 
 const BusIconSVG = () => (
     <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -100,16 +100,13 @@ const BusMap = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await fetchLocationData();
+            await fetchData('/locations/').then(res => {
                 const filteredLocations = res.data || [];
                 setLocations(filteredLocations);
 
                 setBusLocations(filteredLocations.filter(location => location.type === 'driver'));
                 setPickupStations(filteredLocations.filter(location => location.type === 'stage'));
-            } catch (err) {
-                console.log('Error fetching locations:', err);
-            }
+            }).catch(err => console.error('Error fetching locations: ', err));
         };
 
         fetchData();
@@ -205,7 +202,7 @@ const BusMap = () => {
                         <LocationMarker position={dropOffLocation} label="Drop-off" color="green" />
                     )}
                     {busLocations.map((location, index) => (
-                        <BusMarker key={index} position={[location.lat, location.lon]} name={location.name} />
+                        <BusMarker key={index} position={[location.latitude, location.longitude]} name={location.type} />
                     ))}
                 </MapContainer>
                 <Fab color="primary" aria-label="locate" onClick={handleGetLocation}
