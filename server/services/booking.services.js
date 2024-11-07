@@ -1,10 +1,12 @@
 import Booking from '../database/models/booking.models.js';
 import Bus from '../database/models/bus.models.js';
+import Location from '../database/models/location.models.js'; 
 import { sequelize } from '../database/config/database.config.js';
+import { getDistance } from '../src/utils/distanceUtils.js';
 
 const BookingController = {
     createBooking: async (req, res) => {
-        const { userId, busId, ticketId, pickupLocation, dropoffLocation, ticketPrice, pickupTime, bookingTime } = req.body;
+        const { userId, busId, ticketId, pickupLocation, dropoffLocation, pickupTime, bookingTime } = req.body;
 
         let transaction;
 
@@ -22,6 +24,24 @@ const BookingController = {
             if (bus.seatsBooked >= bus.numberOfSeats) {
                 return res.status(400).json({ error: 'No available seats on this bus' });
             }
+
+            // Fetch pickup and dropoff locations
+            const pickupLoc = await Location.findByPk(pickupLocation, { transaction });
+            const dropoffLoc = await Location.findByPk(dropoffLocation, { transaction });
+
+            if (!pickupLoc || !dropoffLoc) {
+                return res.status(404).json({ error: 'Pickup or Dropoff location not found' });
+            }
+
+            // Calculate distance (in kilometers)
+            const distance = await getDistance(
+                { lat: pickupLoc.latitude, lng: pickupLoc.longitude },
+                { lat: dropoffLoc.latitude, lng: dropoffLoc.longitude }
+            );
+
+            // Example of a rate per kilometer
+            const ratePerKm = 10; 
+            const ticketPrice = distance * ratePerKm; // Calculates ticket price based on distance
 
             // Create the booking
             const booking = await Booking.create({
@@ -49,6 +69,7 @@ const BookingController = {
             res.status(500).json({ error: 'An error occurred while creating the booking' });
         }
     },
+
 
     getBookingById: async (req, res) => {
         const { id } = req.params;

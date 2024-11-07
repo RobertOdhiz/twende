@@ -1,5 +1,8 @@
-/* .footer-container .MuiTypography-root {
-    color: #ffffff; */
+
+.footer-container .MuiTypography-root {
+    color: #ffffff;
+}
+
 footer {
     width: 100%;
     background-color: #003135;

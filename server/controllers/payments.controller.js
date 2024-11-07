@@ -137,7 +137,7 @@ export const pushSTKCallback = async (req, res) => {
 
         console.log("STK Push Callback Data:", callbackData);
 
-        // Update payment status based on STK Push results (adjust fields accordingly)
+        // Update payment status based on STK Push results 
         await Payment.update(
             {
                 paymentStatus: stkCallback.ResultCode === 0 ? 'completed' : 'failed',

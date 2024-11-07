@@ -1,57 +1,207 @@
-.authContainer{
+/* Main Container Styling */
+.authContainer {
     display: flex;
-    flex-wrap: wrap;
+    min-height: 100vh;
+    position: relative;
+    justify-content: center;
     align-items: center;
-    justify-content: space-evenly;
-    margin: auto;
-    padding: 3em 0 3em 0;
+    padding: 3em 0;
     margin-top: 20px;
-    box-shadow: 0 0.25em 1em rgba(0, 0, 0, 0);
-   
 }
 
-.authContainer h1{
+/* Header Styling */
+.authContainer h1 {
     font-size: 30px;
     color: #003135;
 }
-.authContainer .form{
+
+/* Form Styling */
+.authContainer .form {
     color: #003135;
-    align-items: center;
     display: flex;
     flex-direction: column;
     background-color: #AFDDE5;
     padding: 20px;
-    justify-content: space-around;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    width: 30vw;
-    height: 60vh;
-    padding: 20px;
-    justify-content: space-around;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    width: 100%;
+    /* max-width: 400px; */
+    gap: 1em;
 }
-.authContainer .form input{
-    margin-left: 20px;
+
+/* Input Group */
+.authContainer .form .inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Full width */
+}
+
+.authContainer .form label {
+    align-self: flex-start;
+    font-size: 1rem;
+    color: #003135;
+    margin-bottom: 0.2em;
+}
+
+.authContainer .form input {
+    width: 100%; /* Full width */
     border: none;
-    padding: 10px;
+    padding: 0.8em;
     border-radius: 10px;
     box-shadow: 0 0.25em 1em rgba(116, 26, 26, 0);
     justify-content: space-around;
-
-
+    font-size: 1rem;
 }
 
-.authContainer .log{
+.authContainer .form input:focus {
+    outline: none;
+    border: 2px solid #003135;
+    background-color: #fff;
+}
+
+/* Password Toggle Button */
+.authContainer .togglePasswordBtn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: #003135;
+    font-size: 0.9rem;
+    margin-top: -2em;
+    margin-right: 0.5em;
+    cursor: pointer;
+}
+
+/* Login Button */
+.authContainer .loginBtn {
+    background-color: #00796b;
+    color: #fff;
+    padding: 0.8em;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%; /* Full width */
+    transition: background-color 0.3s ease;
+}
+
+.authContainer .loginBtn:hover {
+    background-color: #00574b;
+}
+
+.authContainer .loginBtn.loading {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Google Button */
+.authContainer .googleButton {
+    width: 100%; /* Full width */
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+    color: #003135;
+    background-color: white;
+}
+
+/* Log Link */
+.authContainer .log {
+    background-color: white;
     align-items: center;
-    margin: auto;
     display: flex;
     justify-content: center;
     flex-direction: row;
     margin-top: 50px;
+    padding: 8px;
+    border-radius: 8px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.authContainer .link{
+
+.authContainer .link {
     color: #003135;
     text-decoration: none;
-    margin-left: 20px;
+    margin-left: 5px;
     font-weight: bold;
+}
+
+/* Error and Success Messages */
+.errorMessage {
+    color: #d32f2f;
+    font-size: 0.9rem;
+}
+
+.successMessage {
+    color: #388e3c;
+    font-size: 0.9rem;
+}
+
+/* Login/Signup Layout */
+.authContainer {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+.leftSide {
+    width: 50%;
+    padding: 20px;
+    z-index: 2;
+}
+
+.rightSide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    background: rgba(0, 255, 0, 0.1); /* Light mint background */
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Card Component */
+.leftSide .card {
+    background: transparent;
+    padding: 20px;
+    border-radius: 10px; 
+}
+
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+/* Circle Animation */
+.circles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    animation: moveCircles 15s linear infinite;
+}
+
+@keyframes moveCircles {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .authContainer {
+        flex-direction: column;
+    }
+
+    .leftSide {
+        width: 100%;
+    }
+
+    .rightSide {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+    }
 }
