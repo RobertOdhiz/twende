@@ -9,7 +9,7 @@ function Hero() {
             <img src={heroImage} alt="" className='heroimage'/>
             <div className="overlay-gradient"></div> 
             <div className="herotext">
-                <h1>TWENDE</h1>
+                <h1>TUENDE</h1>
                 <p className="tagline" id='tagline'> Fast, Convenient, <span>Reliable</span></p>
                 <Link to='/book'>
                     <button className="bg-skyblue text-mint font-bold py-2 px-4 w-40 h-15 mx-10 my-10 rounded-2xl hover:bg-white hover:text-mint">Book Now</button>

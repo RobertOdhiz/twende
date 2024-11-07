@@ -49,6 +49,7 @@
     padding: 0.8em;
     border-radius: 10px;
     box-shadow: 0 0.25em 1em rgba(116, 26, 26, 0);
+    justify-content: space-around;
     font-size: 1rem;
 }
 

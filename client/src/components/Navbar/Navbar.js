@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import logo from "../Assets/logo2.png";
 
 function Navbar() {
     const [showMenu, setShowMenu] = useState(false);
@@ -11,7 +12,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <Link to="/home" className="logo">
-                TWENDE
+            <img src={logo} alt="logo"/>
             </Link>
 
             <div className="desktopMenu">

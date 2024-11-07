@@ -1,5 +1,6 @@
 import React from 'react'
 import './Footer.css'
+import logo from'../Assets/logo2.png'
 
 
 function Footer() {
@@ -7,7 +8,7 @@ function Footer() {
   <footer>
     <div className='footer'>
         <div className="column">
-          {/* <img src={FooterLogo} alt="" /> */}
+          <img src={logo} alt="" />
         </div>
         <div className="column">
           <h4>Resources</h4>
